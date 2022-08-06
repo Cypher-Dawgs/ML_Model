@@ -17,6 +17,7 @@ def test():
 
 @app.route('/',methods=['GET'])
 def index():
+    # print(request.args['FRUITS_VEGGIES'])
     FRUITS_VEGGIES=float(request.args['FRUITS_VEGGIES'])
     DAILY_STRESS=float(request.args['DAILY_STRESS'])
     PLACES_VISITED=float(request.args['PLACES_VISITED'])
@@ -37,11 +38,11 @@ def index():
     PERSONAL_AWARDS=float(request.args['PERSONAL_AWARDS'])
     TIME_FOR_PASSION=float(request.args['TIME_FOR_PASSION'])
     WEEKLY_MEDITATION=float(request.args['WEEKLY_MEDITATION'])
-    AGE=str(request.args['AGE'])
+    AGE=str(22)
     GENDER=float(request.args['GENDER'])
     
     X = dataset.iloc[:, 1:-1].values
-    ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [-2])], remainder='passthrough')
+    ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(handle_unknown='ignore'), [-2])], remainder='passthrough')
     X = np.array(ct.fit_transform(X))
     test=[[FRUITS_VEGGIES,
           DAILY_STRESS,
@@ -68,6 +69,7 @@ def index():
     test=ct.transform(test)
     pred=model.predict(test)
     return jsonify(prediction=str(round(pred[0],2)))
+    # return jsonify(prediction='0.0')
 
 if __name__ == "__main__":
     app.run(debug=True)
